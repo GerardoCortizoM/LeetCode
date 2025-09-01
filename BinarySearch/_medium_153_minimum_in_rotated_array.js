@@ -9,7 +9,7 @@ var findMin = function (nums) {
   while (start <= end) {
     mid = start + Math.floor((end - start) / 2);
     if (nums[mid] < nums[end]) {
-      end = mid - 1;
+      end = mid;
     } else {
       start = mid + 1;
     }
@@ -27,4 +27,7 @@ nums = [11, 13, 15, 17];
 console.log(findMin(nums)); //11
 
 nums = [5, 1, 2, 3, 4];
+console.log(findMin(nums)); //1
+
+nums = [3, 1, 2];
 console.log(findMin(nums)); //1
