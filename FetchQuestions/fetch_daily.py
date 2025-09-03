@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+import pprint
 
 URL = "https://leetcode.com/graphql"
 HEADERS = {
@@ -9,43 +10,43 @@ HEADERS = {
 
 def fetch_daily_question(year=None, month=None, day=None):
 
-    current_datetime = datetime.now()
-    year_string = year or current_datetime.strftime("%Y")
-    month_string = month or current_datetime.strftime("%m")
+    # current_datetime = datetime.now()
+    # year_string = year or current_datetime.strftime("%Y")
+    # month_string = month or current_datetime.strftime("%m")
     day_string = day or current_datetime.strftime("%d")
-    URL = "https://leetcode.com/graphql/?query=query{"
-    query = f"""
-    query questionOfToday {{
-    dailyCodingChallengeV2 {{
-        date
-        question {{
-            title
-            titleSlug
-            difficulty
-            content
-        }}
-    dailyCodingChallengeV2(year: {year_string}, month: {month_string}) {{
-        challenges {{
-            date
-            question {{
-                questionFrontendId
-                title
-                titleSlug
-                difficulty
-                stats
-        }}
-        }}
-        }}
-}}"""
-    url = URL + query + "}"
+    query = """query questionOfToday {
+  activeDailyCodingChallengeQuestion {
+    date
+    userStatus
+    link
+    question {
+      acRate
+      difficulty
+      freqBar
+      frontendQuestionId: questionFrontendId
+      isFavor
+      paidOnly: isPaidOnly
+      status
+      title
+      titleSlug
+      hasVideoSolution
+      hasSolution
+      topicTags {
+        name
+        id
+        slug
+      }
+    }
+  }
+}"""
     response = requests.post(
-        url,
+        URL,
+        # json={"query": query, "variables": {}, "headers": HEADERS}
         json={"query": query, "variables": {}}
     )
 
-    # data = response.json()
-    # print(data)
-    print(response)
+    data = response.json()
+    pprint.pprint(data)
 
 
 fetch_daily_question()
